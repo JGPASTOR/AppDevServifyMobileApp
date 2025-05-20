@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('services', function (Blueprint $table) {
             $table->id();
-            $table->string('full_name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->enum('role', ['client', 'provider', 'admin'])->default('client');
-            $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->rememberToken();
+            $table->foreignId('provider_id')->constrained('users');
+            $table->string('name');
+            $table->text('description');
+            $table->decimal('price', 10, 2);
+            $table->integer('duration_minutes');
+            $table->string('category');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('services');
     }
 };
